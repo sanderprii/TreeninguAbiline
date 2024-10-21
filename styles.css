@@ -12,19 +12,10 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-
-
 }
 
 h1, h2 {
     text-align: center;
-}
-
-#main-menu {
-    display: flex; /* Paiguta nupud kõrvuti */
-    justify-content: center; /* Joonda nuppe keskele */
-    align-items: center; /* Vertikaalne joondus */
-    gap: 20px; /* Lisa ruumi nuppude vahele */
 }
 
 form {
@@ -40,7 +31,7 @@ input {
 }
 
 input.error {
-    border-color: #dc3545; /* Punane piir veateate jaoks */
+    border-color: #dc3545;
 }
 
 button {
@@ -50,9 +41,8 @@ button {
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    transition: background-color 0.3s; /* Sujuv üleminek */
-    width: 100%;
-    margin: 10px 0;
+    transition: background-color 0.3s;
+    width: 100%; /* Kõik nupud võtavad kogu laiuse */
 }
 
 button:hover {
@@ -78,23 +68,37 @@ li {
     cursor: pointer;
 }
 
-.header {
-    display: flex; /* Flexbox paigutus */
-    justify-content: space-between; /* Ruumi jagamine */
-    align-items: center; /* Vertikaalne joondus */
-    margin-bottom: 20px; /* Ruumi allpool */
+/* Otsinguriba ja tulemused */
+#search-container {
+    margin-bottom: 20px;
+    position: relative;
 }
 
 #search-bar {
-    flex: 1; /* Otsi riba laiendatakse, et täita ruumi */
-    padding: 10px; /* Sisemine täidis */
-    margin-right: 10px; /* Vahe rippmenüü ja otsinguriba vahel */
-    border: 1px solid #ddd; /* Piir */
-    border-radius: 3px; /* Nurgad */
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 5px;
 }
 
-#menu {
-    padding: 10px; /* Sisemine täidis */
-    border-radius: 3px; /* Nurgad */
-    border: 1px solid #ddd; /* Piir */
+#search-results {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+}
+
+#search-results li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background-color: #f4f4f4;
 }

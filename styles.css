@@ -12,10 +12,19 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+
 }
 
 h1, h2 {
     text-align: center;
+}
+
+#main-menu {
+    display: flex; /* Paiguta nupud kõrvuti */
+    justify-content: center; /* Joonda nuppe keskele */
+    align-items: center; /* Vertikaalne joondus */
+    gap: 20px; /* Lisa ruumi nuppude vahele */
 }
 
 form {
@@ -31,7 +40,7 @@ input {
 }
 
 input.error {
-    border-color: #dc3545; /* Red border for errors */
+    border-color: #dc3545; /* Punane piir veateate jaoks */
 }
 
 button {
@@ -41,7 +50,9 @@ button {
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    transition: background-color 0.3s; /* Smooth transition */
+    transition: background-color 0.3s; /* Sujuv üleminek */
+    width: 100%;
+    margin: 10px 0;
 }
 
 button:hover {
@@ -65,4 +76,25 @@ li {
 .delete {
     color: #dc3545;
     cursor: pointer;
+}
+
+.header {
+    display: flex; /* Flexbox paigutus */
+    justify-content: space-between; /* Ruumi jagamine */
+    align-items: center; /* Vertikaalne joondus */
+    margin-bottom: 20px; /* Ruumi allpool */
+}
+
+#search-bar {
+    flex: 1; /* Otsi riba laiendatakse, et täita ruumi */
+    padding: 10px; /* Sisemine täidis */
+    margin-right: 10px; /* Vahe rippmenüü ja otsinguriba vahel */
+    border: 1px solid #ddd; /* Piir */
+    border-radius: 3px; /* Nurgad */
+}
+
+#menu {
+    padding: 10px; /* Sisemine täidis */
+    border-radius: 3px; /* Nurgad */
+    border: 1px solid #ddd; /* Piir */
 }

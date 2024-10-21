@@ -1,5 +1,5 @@
 // Loome muutujad, et salvestada kasutajad ja loginud kasutaja
-let users = JSON.parse(localStorage.getItem('users')) || []; // Load users from localStorage
+let users = JSON.parse(localStorage.getItem('users')) || []; // Laadi kasutajad localStorage'ist
 let loggedInUser = null;
 
 // Kuva autentimise vorm
@@ -11,21 +11,31 @@ document.getElementById('login-btn').addEventListener('click', function() {
     showAuthForm('login');
 });
 
+// Kui kasutaja on registreerimislehel ja soovib logida sisse
+document.getElementById('to-login-btn').addEventListener('click', function() {
+    showAuthForm('login');
+});
+
+// Kui kasutaja on sisselogimislehel ja soovib luua konto
+document.getElementById('to-register-btn').addEventListener('click', function() {
+    showAuthForm('register');
+});
+
 // Funktsioon autentimise vormi kuvamiseks
 function showAuthForm(mode) {
-    document.getElementById('main-menu').style.display = 'none';
-    document.getElementById('auth-container').style.display = 'block';
+    document.getElementById('main-menu').style.display = 'none'; // Peida peamenüü
+    document.getElementById('auth-container').style.display = 'block'; // Näita vormi konteinerit
 
     if (mode === 'register') {
-        document.getElementById('form-title').textContent = 'Kasutaja loomine';
-        document.getElementById('submit-btn').textContent = 'Loo kasutaja';
-        document.getElementById('to-register-btn').style.display = 'none'; // Peida nupp registreerimise vormis
-        document.getElementById('to-login-btn').style.display = 'block'; // Näita "Logi sisse" nuppu registreerimise vormis
+        document.getElementById('form-title').textContent = 'Kasutaja loomine'; // Muuda pealkiri
+        document.getElementById('submit-btn').textContent = 'Loo kasutaja'; // Muuda nupu tekst
+        document.getElementById('to-register-btn').style.display = 'none'; // Peida "Loo kasutaja" nupp
+        document.getElementById('to-login-btn').style.display = 'block'; // Näita "Logi sisse" nuppu
     } else {
-        document.getElementById('form-title').textContent = 'Sisselogimine';
-        document.getElementById('submit-btn').textContent = 'Logi sisse';
-        document.getElementById('to-register-btn').style.display = 'block'; // Näita "Loo kasutaja" nuppu sisselogimise vormis
-        document.getElementById('to-login-btn').style.display = 'none'; // Peida "Logi sisse" nupp sisselogimise vormis
+        document.getElementById('form-title').textContent = 'Sisselogimine'; // Muuda pealkiri
+        document.getElementById('submit-btn').textContent = 'Logi sisse'; // Muuda nupu tekst
+        document.getElementById('to-register-btn').style.display = 'block'; // Näita "Loo kasutaja" nuppu
+        document.getElementById('to-login-btn').style.display = 'none'; // Peida "Logi sisse" nupp
     }
 }
 
@@ -60,7 +70,7 @@ function createUser(username, password) {
 
     // Lisa uus kasutaja
     users.push({ username, password });
-    localStorage.setItem('users', JSON.stringify(users)); // Save to localStorage
+    localStorage.setItem('users', JSON.stringify(users)); // Salvesta localStorage'isse
     alert('Kasutaja loodud!');
 
     // Naase algsesse vaatesse
@@ -74,6 +84,9 @@ function loginUser(username, password) {
     if (user) {
         loggedInUser = user;
         alert('Sisse logitud!');
+
+        // Kuvame kasutaja nime
+        document.getElementById('user-name').textContent = username;
 
         // Näita treeningute lisamise vormi
         document.getElementById('auth-container').style.display = 'none';

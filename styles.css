@@ -14,7 +14,7 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
+h1, h2, h3 {
     text-align: center;
 }
 
@@ -42,7 +42,8 @@ button {
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100%; /* Kõik nupud võtavad kogu laiuse */
+    width: 100%; /* Nupp võtab kogu konteineri laiuse */
+    margin: 5px 0;
 }
 
 button:hover {
@@ -66,6 +67,24 @@ li {
 .delete {
     color: #dc3545;
     cursor: pointer;
+}
+
+/* Ristkülikud */
+.rectangle {
+    background-color: #007bff;
+    color: white;
+    padding: 20px; /* Säilitame algse paddingu */
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%; /* Ristkülik võtab kogu konteineri laiuse */
+    transition: background-color 0.3s;
+    max-width: 560px;
+}
+
+.rectangle:hover {
+    background-color: #0056b3;
 }
 
 /* Otsinguriba ja tulemused */
@@ -92,6 +111,7 @@ li {
     overflow-y: auto;
     position: absolute;
     width: 100%;
+    z-index: 1;
 }
 
 #search-results li {
@@ -101,4 +121,60 @@ li {
 
 #search-results li:hover {
     background-color: #f4f4f4;
+}
+
+/* Tagasi nupp */
+.back-btn {
+    margin-bottom: 20px;
+    background-color: #6c757d;
+}
+
+.back-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Ajajoon */
+#timeline {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-right: 40px;
+    text-align: center;
+}
+
+.timeline-item:last-child {
+    margin-right: 0;
+}
+
+.timeline-item .circle {
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-item .line {
+    position: absolute;
+    top: 25px;
+    left: 50px;
+    width: 40px;
+    height: 2px;
+    background-color: #007bff;
+    z-index: 1;
+}
+
+.timeline-item:last-child .line {
+    display: none;
+}
+
+.timeline-item p {
+    margin-top: 10px;
+    font-size: 14px;
 }

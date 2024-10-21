@@ -54,7 +54,7 @@ document.getElementById('user-form').addEventListener('submit', function(event) 
 
 function createUser(username, password) {
     if (users.find(user => user.username === username)) {
-        alert('Kasutajanimi on juba olemas.');
+        alert('Kasutajanimi on juba olemas. Palun vali teine.');
         document.getElementById('username').classList.add('error');
         return;
     }
@@ -62,55 +62,80 @@ function createUser(username, password) {
     users.push({ username, password });
     localStorage.setItem('users', JSON.stringify(users));
     alert('Kasutaja loodud!');
-
-    document.getElementById('auth-container').style.display = 'none';
-    document.getElementById('main-menu').style.display = 'block';
+    showAuthForm('login');
 }
 
 function loginUser(username, password) {
     const user = users.find(user => user.username === username && user.password === password);
     if (user) {
         loggedInUser = user;
-        document.getElementById('user-name').textContent = username;
-        alert('Sisse logitud!');
         document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('workout-container').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('user-name').textContent = username;
     } else {
         alert('Vale kasutajanimi või parool.');
         document.getElementById('username').classList.add('error');
     }
 }
 
-// Treeningu lisamine
+// Ristkülikute klikkimine
+document.getElementById('workout-page').addEventListener('click', function() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('workout-container').style.display = 'block';
+});
+
+document.getElementById('timeline-page').addEventListener('click', function() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('timeline-container').style.display = 'block';
+    showTimeline();
+});
+
+document.getElementById('ai-suggestions-page').addEventListener('click', function() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('ai-container').style.display = 'block';
+});
+
+document.getElementById('profile-page').addEventListener('click', function() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('profile-container').style.display = 'block';
+});
+
+// Tagasi nupud
+const backButtons = document.querySelectorAll('.back-btn');
+backButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        this.parentElement.style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+    });
+});
+
+// Treeningute lisamine
 document.getElementById('workout-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const date = document.getElementById('date').value;
     const type = document.getElementById('type').value;
     const duration = document.getElementById('duration').value;
+    const calories = document.getElementById('calories').value;
 
-    addWorkout(date, type, duration);
+    const workout = { date, type, duration, calories };
+    workouts.push(workout);
+    addWorkoutToList(workout);
 
     document.getElementById('workout-form').reset();
 });
 
-function addWorkout(date, type, duration) {
+function addWorkoutToList(workout) {
     const workoutList = document.getElementById('workout-list');
-
     const li = document.createElement('li');
-    li.innerHTML = `
-        <span>${date} - ${type} (${duration} min)</span>
-        <span class="delete" onclick="deleteWorkout(this)">Kustuta</span>
-    `;
-
+    li.innerHTML = `${workout.date} - ${workout.type} (${workout.duration} min, ${workout.calories} kcal) <span class="delete" onclick="deleteWorkout(this)">Kustuta</span>`;
     workoutList.appendChild(li);
-    workouts.push({ date, type, duration });
 }
 
-// Treeningu kustutamine
 function deleteWorkout(element) {
-    const workoutList = document.getElementById('workout-list');
-    workoutList.removeChild(element.parentElement);
+    const index = Array.from(element.parentElement.parentElement.children).indexOf(element.parentElement);
+    workouts.splice(index, 1);
+    element.parentElement.remove();
 }
 
 // Otsing
@@ -122,17 +147,47 @@ document.getElementById('search-bar').addEventListener('input', function() {
     if (searchTerm === '') return;
 
     const filteredWorkouts = workouts.filter(workout => workout.type.toLowerCase().startsWith(searchTerm));
-
     filteredWorkouts.forEach(workout => {
         const li = document.createElement('li');
-        li.textContent = `${workout.date} - ${workout.type} (${workout.duration} min)`;
+        li.textContent = `${workout.date} - ${workout.type} (${workout.duration} min, ${workout.calories} kcal)`;
         searchResults.appendChild(li);
     });
 });
 
+// Ajajoone kuvamine
+function showTimeline() {
+    const timeline = document.getElementById('timeline');
+    timeline.innerHTML = '';
+
+    // Sorteeri treeningud kuupäeva järgi
+    const sortedWorkouts = workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    sortedWorkouts.forEach((workout, index) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+
+        const circle = document.createElement('div');
+        circle.className = 'circle';
+        item.appendChild(circle);
+
+        if (index < sortedWorkouts.length - 1) {
+            const line = document.createElement('div');
+            line.className = 'line';
+            item.appendChild(line);
+        }
+
+        const info = document.createElement('p');
+        info.textContent = `${workout.date} - ${workout.type}`;
+        item.appendChild(info);
+
+        timeline.appendChild(item);
+    });
+}
+
 // Logi välja
 document.getElementById('logout-btn').addEventListener('click', function() {
     loggedInUser = null;
-    document.getElementById('workout-container').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
     document.getElementById('main-menu').style.display = 'block';
+    alert('Oled välja logitud.');
 });

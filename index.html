@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treeningu Assistent</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Treeningu Assistent</h1>
+
+    <div id="main-menu">
+        <button id="register-btn">Loo kasutaja</button>
+        <button id="login-btn">Logi sisse</button>
+    </div>
+
+    <div id="auth-container" style="display: none;">
+        <h2 id="form-title"></h2>
+        <form id="user-form">
+            <input type="text" id="username" placeholder="Kasutajanimi" required>
+            <input type="password" id="password" placeholder="Parool" required>
+            <button type="submit" id="submit-btn"></button>
+        </form>
+        <button id="to-login-btn" style="display: none;">Logi sisse</button> <!-- Ainult registreerimise lehel -->
+        <button id="to-register-btn" style="display: none;">Loo kasutaja</button> <!-- Ainult sisselogimise lehel -->
+    </div>
+
+    <div id="workout-container" style="display: none;">
+        <h2>Treeningu lisamine</h2>
+        <form id="workout-form">
+            <input type="date" id="date" required>
+            <input type="text" id="type" placeholder="Treeningu tüüp" required>
+            <input type="number" id="duration" placeholder="Kestus (min)" required>
+            <button type="submit">Lisa treening</button>
+        </form>
+        <ul id="workout-list"></ul>
+        <button id="logout-btn">Logi välja</button>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

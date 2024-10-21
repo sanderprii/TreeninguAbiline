@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
+<header>
     <h1>Treeningu Assistent</h1>
-
+</header>
+<main class="container">
     <div id="main-menu">
-        <button id="register-btn">Loo kasutaja</button>
-        <button id="login-btn">Logi sisse</button>
+        <button id="register-btn" aria-label="Loo kasutaja">Loo kasutaja</button>
+        <button id="login-btn" aria-label="Logi sisse">Logi sisse</button>
     </div>
 
     <div id="auth-container" style="display: none;">
@@ -22,8 +23,8 @@
             <input type="password" id="password" placeholder="Parool" required>
             <button type="submit" id="submit-btn"></button>
         </form>
-        <button id="to-login-btn" style="display: none;">Logi sisse</button> <!-- Ainult registreerimise lehel -->
-        <button id="to-register-btn" style="display: none;">Loo kasutaja</button> <!-- Ainult sisselogimise lehel -->
+        <button id="to-login-btn" style="display: none;">Logi sisse</button>
+        <button id="to-register-btn" style="display: none;">Loo kasutaja</button>
     </div>
 
     <div id="workout-container" style="display: none;">
@@ -37,7 +38,10 @@
         <ul id="workout-list"></ul>
         <button id="logout-btn">Logi välja</button>
     </div>
-</div>
+</main>
+<footer>
+    <p>&copy; 2024 Treeningu Assistent</p>
+</footer>
 <script src="script.js"></script>
 </body>
 </html>

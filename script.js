@@ -1,5 +1,5 @@
 // Loome muutujad, et salvestada kasutajad ja loginud kasutaja
-const users = [];
+let users = JSON.parse(localStorage.getItem('users')) || []; // Load users from localStorage
 let loggedInUser = null;
 
 // Kuva autentimise vorm
@@ -36,6 +36,9 @@ document.getElementById('user-form').addEventListener('submit', function(event) 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
+    // Eemaldage võimalikud veateated
+    document.getElementById('username').classList.remove('error');
+
     if (document.getElementById('submit-btn').textContent === 'Loo kasutaja') {
         createUser(username, password);
     } else {
@@ -51,11 +54,13 @@ function createUser(username, password) {
     // Kontrolli, kas kasutajanimi juba eksisteerib
     if (users.find(user => user.username === username)) {
         alert('Kasutajanimi on juba olemas. Palun vali teine.');
+        document.getElementById('username').classList.add('error');
         return;
     }
 
     // Lisa uus kasutaja
     users.push({ username, password });
+    localStorage.setItem('users', JSON.stringify(users)); // Save to localStorage
     alert('Kasutaja loodud!');
 
     // Naase algsesse vaatesse
@@ -75,6 +80,7 @@ function loginUser(username, password) {
         document.getElementById('workout-container').style.display = 'block';
     } else {
         alert('Vale kasutajanimi või parool.');
+        document.getElementById('username').classList.add('error');
     }
 }
 
@@ -118,5 +124,3 @@ document.getElementById('logout-btn').addEventListener('click', function() {
     document.getElementById('main-menu').style.display = 'block';
     alert('Oled välja logitud.');
 });
-
-// Loo kasutaja nupu toimimise kä

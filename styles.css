@@ -30,6 +30,10 @@ input {
     border-radius: 3px;
 }
 
+input.error {
+    border-color: #dc3545; /* Red border for errors */
+}
+
 button {
     padding: 10px;
     background-color: #28a745;
@@ -37,6 +41,7 @@ button {
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition */
 }
 
 button:hover {

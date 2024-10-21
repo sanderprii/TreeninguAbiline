@@ -93,6 +93,7 @@ document.getElementById('timeline-page').addEventListener('click', function() {
 document.getElementById('ai-suggestions-page').addEventListener('click', function() {
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('ai-container').style.display = 'block';
+    generateAISuggestions();
 });
 
 document.getElementById('profile-page').addEventListener('click', function() {
@@ -160,7 +161,7 @@ function showTimeline() {
     timeline.innerHTML = '';
 
     // Sorteeri treeningud kuupäeva järgi
-    const sortedWorkouts = workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const sortedWorkouts = workouts.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
 
     sortedWorkouts.forEach((workout, index) => {
         const item = document.createElement('div');
@@ -181,6 +182,44 @@ function showTimeline() {
         item.appendChild(info);
 
         timeline.appendChild(item);
+    });
+}
+
+// Tehisintellekti soovituste genereerimine
+function generateAISuggestions() {
+    const aiSuggestionsContainer = document.getElementById('ai-suggestions');
+    aiSuggestionsContainer.innerHTML = '';
+
+    if (workouts.length === 0) {
+        aiSuggestionsContainer.innerHTML = '<p>Tehisintellektil puuduvad andmed soovituste tegemiseks. Palun sisesta mõned treeningud.</p>';
+        return;
+    }
+
+    // Loendame, milliseid treeninguid on kõige rohkem tehtud
+    const workoutCounts = {};
+    workouts.forEach(workout => {
+        if (workoutCounts[workout.type]) {
+            workoutCounts[workout.type]++;
+        } else {
+            workoutCounts[workout.type] = 1;
+        }
+    });
+
+    // Leiame kõige sagedamini tehtud treeningu tüübi
+    const favoriteWorkout = Object.keys(workoutCounts).reduce((a, b) => workoutCounts[a] > workoutCounts[b] ? a : b);
+
+    // Loome soovitused
+    const suggestions = [
+        `Kuna sulle meeldib ${favoriteWorkout}, soovitame proovida järgmist treeningut: ${favoriteWorkout} kõrgema intensiivsusega.`,
+        `Proovi vahelduseks ${favoriteWorkout} intervalltreeningut, et parandada oma vastupidavust.`,
+        `Et täiendada oma ${favoriteWorkout} treeninguid, lisage oma kavasse ka jõutreeningut.`
+    ];
+
+    // Kuvame soovitused
+    suggestions.forEach(suggestion => {
+        const p = document.createElement('p');
+        p.textContent = suggestion;
+        aiSuggestionsContainer.appendChild(p);
     });
 }
 

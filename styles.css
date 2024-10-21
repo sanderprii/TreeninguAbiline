@@ -6,12 +6,12 @@ body {
 }
 
 .container {
-    max-width: 600px;
     margin: auto;
     background: white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 600px;
 }
 
 h1, h2, h3 {
@@ -42,8 +42,8 @@ button {
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100%; /* Nupp võtab kogu konteineri laiuse */
-    margin: 5px 0;
+    width: 100%; /* Võtab kogu saadaoleva laiuse */
+    display: block; /* Tagab, et elemendid asuvad üksteise kohal */
 }
 
 button:hover {
@@ -73,14 +73,20 @@ li {
 .rectangle {
     background-color: #007bff;
     color: white;
-    padding: 20px; /* Säilitame algse paddingu */
     margin: 10px 0;
-    border-radius: 5px;
+    border-radius: 3px;
     text-align: center;
     cursor: pointer;
-    width: 100%; /* Ristkülik võtab kogu konteineri laiuse */
+    width: 100%;
+    display: flex; /* Lisatud Flexbox */
+    justify-content: center; /* Horisontaalne tsentreerimine */
+    align-items: center; /* Vertikaalne tsentreerimine */
     transition: background-color 0.3s;
-    max-width: 560px;
+    aspect-ratio: 4 / 1; /* Laiuse ja kõrguse suhe */
+    padding: 10px;
+    box-sizing: border-box;
+
+
 }
 
 .rectangle:hover {
@@ -127,6 +133,8 @@ li {
 .back-btn {
     margin-bottom: 20px;
     background-color: #6c757d;
+    width: 100%; /* Võtab kogu saadaoleva laiuse */
+    display: block; /* Tagab, et elemendid asuvad üksteise kohal */
 }
 
 .back-btn:hover {

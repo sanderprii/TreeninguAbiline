@@ -1,5 +1,7 @@
 # Treeningu Assistendi Rakendus
 
+# https://sanderprii.github.io/TreeninguAbiline/
+
 Treeningu assistendi rakendus on veebipõhine treeningpäevik, kuhu saad lisada oma treeningud, jälgida edusamme ja saavutada oma treeningueesmärke. Rakendus on loodud HTML, CSS ja JavaScripti kasutades, et pakkuda kasutajasõbralikku liidest ja sujuvat kasutuskogemust.
 
 ## Funktsionaalsus

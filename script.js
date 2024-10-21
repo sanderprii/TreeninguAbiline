@@ -124,7 +124,7 @@ function addWorkout(date, type, duration) {
     workoutList.appendChild(li);
 }
 
-// Funktsioon treeningu kustutamiseks
+// Funktsioon treeningu kustutamisekss
 function deleteWorkout(element) {
     const workoutList = document.getElementById('workout-list');
     workoutList.removeChild(element.parentElement);

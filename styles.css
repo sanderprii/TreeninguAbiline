@@ -42,8 +42,9 @@ button {
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100%; /* Võtab kogu saadaoleva laiuse */
-    display: block; /* Tagab, et elemendid asuvad üksteise kohal */
+    width: 100%;
+    display: block;
+    margin: 5px 0;
 }
 
 button:hover {
@@ -78,11 +79,11 @@ li {
     text-align: center;
     cursor: pointer;
     width: 100%;
-    display: flex; /* Lisatud Flexbox */
-    justify-content: center; /* Horisontaalne tsentreerimine */
-    align-items: center; /* Vertikaalne tsentreerimine */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: background-color 0.3s;
-    aspect-ratio: 4 / 1; /* Laiuse ja kõrguse suhe */
+    aspect-ratio: 4 / 1;
     padding: 10px;
     box-sizing: border-box;
 
@@ -129,12 +130,12 @@ li {
     background-color: #f4f4f4;
 }
 
-/* Tagasi nupp */
+
 .back-btn {
     margin-bottom: 20px;
     background-color: #6c757d;
-    width: 100%; /* Võtab kogu saadaoleva laiuse */
-    display: block; /* Tagab, et elemendid asuvad üksteise kohal */
+    width: 100%;
+    display: block;
 }
 
 .back-btn:hover {

@@ -1,5 +1,37 @@
+// Laadime dotenv paketi ja konfigureerime keskkonnamuutujad
+require('dotenv').config();
+
+// Impordi Cosmos DB klient
+const { CosmosClient } = require("@azure/cosmos");
+
+// Seadista Cosmos DB ühendus keskkonnamuutujate kaudu
+const endpoint = process.env.COSMOS_DB_ENDPOINT;  // Endpoint loetud .env failist
+const key = process.env.COSMOS_DB_KEY;            // Key loetud .env failist
+const client = new CosmosClient({ endpoint, key });
+
+// Andmebaasi ja konteineri ID-d
+const databaseId = "fitnessAppDB";
+const usersContainerId = "Users";
+const workoutsContainerId = "Workouts";
+
+// Initsialiseeri Cosmos DB ühendus
+async function initCosmos() {
+    const { database } = await client.databases.createIfNotExists({ id: databaseId });
+    const { container: usersContainer } = await database.containers.createIfNotExists({ id: usersContainerId });
+    const { container: workoutsContainer } = await database.containers.createIfNotExists({ id: workoutsContainerId });
+    return { usersContainer, workoutsContainer };
+}
+
+// Globaalne muutuja konteinerite hoidmiseks
+let containers = {};
+
+// Initsialiseeri Cosmos DB ühendus, kui rakendus käivitub
+initCosmos().then(res => {
+    containers = res;
+    console.log("Cosmos DB ühendus loodud.");
+}).catch(err => console.error("Cosmos DB ühendus ebaõnnestus:", err));
+
 // Loome muutujad kasutajate ja treeningute haldamiseks
-let users = JSON.parse(localStorage.getItem('users')) || [];
 let loggedInUser = null;
 let workouts = [];
 
@@ -52,29 +84,48 @@ document.getElementById('user-form').addEventListener('submit', function(event) 
     document.getElementById('user-form').reset();
 });
 
-function createUser(username, password) {
-    if (users.find(user => user.username === username)) {
-        alert('Kasutajanimi on juba olemas. Palun vali teine.');
-        document.getElementById('username').classList.add('error');
-        return;
-    }
+async function createUser(username, password) {
+    try {
+        const { resources: users } = await containers.usersContainer.items.query({
+            query: "SELECT * FROM c WHERE c.username = @username",
+            parameters: [{ name: "@username", value: username }]
+        }).fetchAll();
 
-    users.push({ username, password });
-    localStorage.setItem('users', JSON.stringify(users));
-    alert('Kasutaja loodud!');
-    showAuthForm('login');
+        if (users.length > 0) {
+            alert('Kasutajanimi on juba olemas. Palun vali teine.');
+            document.getElementById('username').classList.add('error');
+            return;
+        }
+
+        await containers.usersContainer.items.create({ username, password });
+        alert('Kasutaja loodud!');
+        showAuthForm('login');
+    } catch (error) {
+        console.error("Kasutaja loomine ebaõnnestus:", error);
+    }
 }
 
-function loginUser(username, password) {
-    const user = users.find(user => user.username === username && user.password === password);
-    if (user) {
-        loggedInUser = user;
-        document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('user-name').textContent = username;
-    } else {
-        alert('Vale kasutajanimi või parool.');
-        document.getElementById('username').classList.add('error');
+async function loginUser(username, password) {
+    try {
+        const { resources: users } = await containers.usersContainer.items.query({
+            query: "SELECT * FROM c WHERE c.username = @username AND c.password = @password",
+            parameters: [
+                { name: "@username", value: username },
+                { name: "@password", value: password }
+            ]
+        }).fetchAll();
+
+        if (users.length > 0) {
+            loggedInUser = users[0];
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('user-name').textContent = username;
+        } else {
+            alert('Vale kasutajanimi või parool.');
+            document.getElementById('username').classList.add('error');
+        }
+    } catch (error) {
+        console.error("Sisselogimine ebaõnnestus:", error);
     }
 }
 
@@ -111,7 +162,7 @@ backButtons.forEach(button => {
 });
 
 // Treeningute lisamine
-document.getElementById('workout-form').addEventListener('submit', function(event) {
+document.getElementById('workout-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
     const date = document.getElementById('date').value;
@@ -119,108 +170,48 @@ document.getElementById('workout-form').addEventListener('submit', function(even
     const duration = document.getElementById('duration').value;
     const calories = document.getElementById('calories').value;
 
-    const workout = { date, type, duration, calories };
-    workouts.push(workout);
-    addWorkoutToList(workout);
+    const workout = { date, type, duration, calories, username: loggedInUser.username };
+
+    try {
+        await containers.workoutsContainer.items.create(workout);
+        addWorkoutToList(workout);
+    } catch (error) {
+        console.error("Treeningu lisamine ebaõnnestus:", error);
+    }
 
     document.getElementById('workout-form').reset();
 });
 
+async function loadWorkouts() {
+    try {
+        const { resources: userWorkouts } = await containers.workoutsContainer.items.query({
+            query: "SELECT * FROM c WHERE c.username = @username",
+            parameters: [{ name: "@username", value: loggedInUser.username }]
+        }).fetchAll();
+
+        workouts = userWorkouts;
+        userWorkouts.forEach(addWorkoutToList);
+    } catch (error) {
+        console.error("Treeningute laadimine ebaõnnestus:", error);
+    }
+}
+
 function addWorkoutToList(workout) {
     const workoutList = document.getElementById('workout-list');
     const li = document.createElement('li');
-    li.innerHTML = `${workout.date} - ${workout.type} (${workout.duration} min, ${workout.calories} kcal) <span class="delete" onclick="deleteWorkout(this)">Kustuta</span>`;
+    li.innerHTML = `${workout.date} - ${workout.type} (${workout.duration} min, ${workout.calories} kcal) <span class="delete" onclick="deleteWorkout(this, '${workout.id}')">Kustuta</span>`;
     workoutList.appendChild(li);
 }
 
-function deleteWorkout(element) {
-    const index = Array.from(element.parentElement.parentElement.children).indexOf(element.parentElement);
-    workouts.splice(index, 1);
-    element.parentElement.remove();
-}
-
-// Otsing
-document.getElementById('search-bar').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const searchResults = document.getElementById('search-results');
-    searchResults.innerHTML = '';
-
-    if (searchTerm === '') return;
-
-    const filteredWorkouts = workouts.filter(workout => workout.type.toLowerCase().startsWith(searchTerm));
-    filteredWorkouts.forEach(workout => {
-        const li = document.createElement('li');
-        li.textContent = `${workout.date} - ${workout.type} (${workout.duration} min, ${workout.calories} kcal)`;
-        searchResults.appendChild(li);
-    });
-});
-
-// Ajajoone kuvamine
-function showTimeline() {
-    const timeline = document.getElementById('timeline');
-    timeline.innerHTML = '';
-
-    // Sorteeri treeningud kuupäeva järgi
-    const sortedWorkouts = workouts.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    sortedWorkouts.forEach((workout, index) => {
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-
-        const circle = document.createElement('div');
-        circle.className = 'circle';
-        item.appendChild(circle);
-
-        if (index < sortedWorkouts.length - 1) {
-            const line = document.createElement('div');
-            line.className = 'line';
-            item.appendChild(line);
-        }
-
-        const info = document.createElement('p');
-        info.textContent = `${workout.date} - ${workout.type}`;
-        item.appendChild(info);
-
-        timeline.appendChild(item);
-    });
-}
-
-// Tehisintellekti soovituste genereerimine
-function generateAISuggestions() {
-    const aiSuggestionsContainer = document.getElementById('ai-suggestions');
-    aiSuggestionsContainer.innerHTML = '';
-
-    if (workouts.length === 0) {
-        aiSuggestionsContainer.innerHTML = '<p>Tehisintellektil puuduvad andmed soovituste tegemiseks. Palun sisesta mõned treeningud.</p>';
-        return;
+async function deleteWorkout(element, workoutId) {
+    try {
+        await containers.workoutsContainer.item(workoutId, loggedInUser.username).delete();
+        const index = Array.from(element.parentElement.parentElement.children).indexOf(element.parentElement);
+        workouts.splice(index, 1);
+        element.parentElement.remove();
+    } catch (error) {
+        console.error("Treeningu kustutamine ebaõnnestus:", error);
     }
-
-    // Loendame, milliseid treeninguid on kõige rohkem tehtud
-    const workoutCounts = {};
-    workouts.forEach(workout => {
-        if (workoutCounts[workout.type]) {
-            workoutCounts[workout.type]++;
-        } else {
-            workoutCounts[workout.type] = 1;
-        }
-    });
-
-    // Leiame kõige sagedamini tehtud treeningu tüübi
-    const favoriteWorkout = Object.keys(workoutCounts).reduce((a, b) => workoutCounts[a] > workoutCounts[b] ? a : b);
-
-    // Loome soovitused
-    const suggestions = [
-        `Kuna sulle meeldib ${favoriteWorkout}, soovitame proovida järgmist treeningut: ${favoriteWorkout} kõrgema intensiivsusega.`,
-        `Proovi vahelduseks ${favoriteWorkout} intervalltreeningut, et parandada oma vastupidavust.`,
-        `Et täiendada oma ${favoriteWorkout} treeninguid, lisage oma kavasse ka jõutreeningut.`
-    ];
-
-    // Kuvame soovitused
-    suggestions.forEach(suggestion => {
-        const p = document.createElement('p');
-        p.textContent = suggestion;
-        aiSuggestionsContainer.appendChild(p);
-    });
 }
 
 // Logi välja

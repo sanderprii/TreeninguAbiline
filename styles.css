@@ -23,12 +23,46 @@ form {
     flex-direction: column;
 }
 
+/* Harjutuse read */
+.exercise-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#exercise-container {
+    margin-bottom: 10px;
+}
+
+#result-input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button.add-row-btn {
+    background-color: #17a2b8;
+}
+
+button.add-row-btn:hover {
+    background-color: #138496;
+}
+
+
 input {
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 3px;
 }
+
+select {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
 
 input.error {
     border-color: #dc3545;

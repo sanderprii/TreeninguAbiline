@@ -54,7 +54,16 @@
         <h3>Lisa treening</h3>
         <form id="workout-form">
             <input type="date" id="date" required>
-            <input type="text" id="type" placeholder="Treeningu tüüp" required>
+            <select id="type" required>
+                <option value="" disabled selected>Vali treeningu tüüp</option>
+                <option value="WOD">WOD</option>
+                <option value="Klassikaline tõstmine">Klassikaline tõstmine</option>
+                <option value="Aeroobne">Aeroobne</option>
+            </select>
+
+            <div id="dynamic-fields"></div>
+
+            <input type="text" id="description" placeholder="Kirjeldus" required>
             <input type="number" id="duration" placeholder="Kestus (min)" required>
             <input type="number" id="calories" placeholder="Kulutatud kalorid" required>
             <button type="submit">Lisa treening</button>

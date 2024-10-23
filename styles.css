@@ -86,8 +86,6 @@ li {
     aspect-ratio: 4 / 1;
     padding: 10px;
     box-sizing: border-box;
-
-
 }
 
 .rectangle:hover {
@@ -129,7 +127,6 @@ li {
 #search-results li:hover {
     background-color: #f4f4f4;
 }
-
 
 .back-btn {
     margin-bottom: 20px;
@@ -186,4 +183,89 @@ li {
 .timeline-item p {
     margin-top: 10px;
     font-size: 14px;
+}
+
+/* Responsiivsuse tugi */
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    .rectangle {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    #timeline {
+        padding: 10px;
+    }
+
+    .timeline-item .circle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .timeline-item .line {
+        width: 30px;
+    }
+
+    .timeline-item p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.2rem;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .rectangle {
+        font-size: 0.8rem;
+        padding: 6px;
+    }
+
+    #timeline {
+        padding: 5px;
+    }
+
+    .timeline-item .circle {
+        width: 30px;
+        height: 30px;
+    }
+
+    .timeline-item .line {
+        width: 20px;
+    }
+
+    .timeline-item p {
+        font-size: 10px;
+    }
 }

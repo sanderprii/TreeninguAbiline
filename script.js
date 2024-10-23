@@ -205,7 +205,7 @@ function generateAISuggestions() {
         }
     });
 
-    // Leiame kõige  sagedamini tehtud treeningu tüübi
+    // Leiame kõige sagedamini tehtud treeningu tüübi
     const favoriteWorkout = Object.keys(workoutCounts).reduce((a, b) => workoutCounts[a] > workoutCounts[b] ? a : b);
 
     // Loome soovitused

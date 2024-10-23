@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treeningu Assistent</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <h1>Treeningu Assistent</h1>
+</header>
+<main class="container">
+    <!-- Peamenüü -->
+    <div id="main-menu">
+        <button id="register-btn" aria-label="Loo kasutaja">Loo kasutaja</button>
+        <button id="login-btn" aria-label="Logi sisse">Logi sisse</button>
+    </div>
+
+    <!-- Autentimise vorm -->
+    <div id="auth-container" style="display: none;">
+        <h2 id="form-title"></h2>
+        <form id="user-form">
+            <input type="text" id="username" placeholder="Kasutajanimi" required>
+            <input type="password" id="password" placeholder="Parool" required>
+            <button type="submit" id="submit-btn"></button>
+        </form>
+        <button id="to-login-btn" style="display: none;">Logi sisse</button>
+        <button id="to-register-btn" style="display: none;">Loo kasutaja</button>
+    </div>
+
+    <!-- Pärast sisselogimist kuvatav juhtpaneel -->
+    <div id="dashboard" style="display: none;">
+        <h2>Tere, <span id="user-name"></span>!</h2>
+
+        <!-- Ristkülikud -->
+        <div class="rectangle" id="workout-page">Sisesta ja Otsi treeninguid</div>
+        <div class="rectangle" id="timeline-page">Treeningute ajajoon</div>
+        <div class="rectangle" id="ai-suggestions-page">Tehisintellekti soovitused</div>
+        <div class="rectangle" id="profile-page">Minu profiil</div>
+
+        <button id="logout-btn">Logi välja</button>
+    </div>
+
+    <!-- "Sisesta ja Otsi treeninguid" leht -->
+    <div id="workout-container" style="display: none;">
+        <button class="back-btn">Tagasi</button>
+        <h3>Otsing ja treeningute lisamine</h3>
+        <div id="search-container">
+            <input type="text" id="search-bar" placeholder="Otsi treeningut...">
+            <ul id="search-results"></ul>
+        </div>
+
+        <h3>Lisa treening</h3>
+        <form id="workout-form">
+            <input type="date" id="date" required>
+            <input type="text" id="type" placeholder="Treeningu tüüp" required>
+            <input type="number" id="duration" placeholder="Kestus (min)" required>
+            <input type="number" id="calories" placeholder="Kulutatud kalorid" required>
+            <button type="submit">Lisa treening</button>
+        </form>
+        <ul id="workout-list"></ul>
+    </div>
+
+    <!-- "Treeningute ajajoon" leht -->
+    <div id="timeline-container" style="display: none;">
+        <button class="back-btn">Tagasi</button>
+        <h3>Treeningute ajajoon</h3>
+        <div id="timeline"></div>
+    </div>
+
+    <!-- "Tehisintellekti soovitused" leht  -->
+    <div id="ai-container" style="display: none;">
+        <button class="back-btn">Tagasi</button>
+        <h3>Tehisintellekti soovitused treeninguteks</h3>
+        <div id="ai-suggestions"></div>
+    </div>
+
+    <!-- "Minu profiil" leht -->
+    <div id="profile-container" style="display: none;">
+        <button class="back-btn">Tagasi</button>
+        <h3>Minu profiil</h3>
+        <p>Profiili info kuvamine...</p>
+    </div>
+</main>
+<footer>
+    <p>&copy; 2024 Treeningu Assistent</p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

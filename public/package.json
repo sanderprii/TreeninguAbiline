@@ -1,0 +1,16 @@
+{
+  "name": "treeninguabiline",
+  "version": "1.0.0",
+  "description": "Treeningu assistendi rakendus on veebipõhine treeningpäevik, kuhu saad lisada oma treeningud, jälgida edusamme ja saavutada oma treeningueesmärke. Rakendus on loodud HTML, CSS ja JavaScripti kasutades, et pakkuda kasutajasõbralikku liidest ja sujuvat kasutuskogemust.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/cosmos": "^4.1.1",
+    "dotenv": "^16.4.5"
+  }
+}

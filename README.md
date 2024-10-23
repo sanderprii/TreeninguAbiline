@@ -1,6 +1,6 @@
 # Treeningu Assistendi Rakendus
 
-# https://sanderprii.github.io/TreeninguAssistent
+# https://sanderprii.github.io/TreeninguAssistent/public
 
 
 
